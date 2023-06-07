@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { 
     SearchbarHeader,
@@ -8,53 +8,44 @@ import {
  } from './Searchbar.styled';
 import { ImSearch } from 'react-icons/im';
 
+export default function Searchbar({onSubmit}) {
+    const [query, setQuery] = useState('');
 
-class Searchbar extends Component {
-    state = {
-        query: '',
+    const heandelChange = e => {
+        setQuery(e.currentTarget.value.toLowerCase().trim())
     }
 
-    heandelChange = e => {
-        this.setState({ query: e.currentTarget.value.toLowerCase().trim()})
-    }
-
-    handleSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault()
-        const {query}  = this.state;
-        this.props.onSubmit(query);
-        this.setState({ query: ''})
+        onSubmit(query);
+        setQuery('')
     }
-  
 
-    render() {
-        const { query } = this.state;
-        
-        return (
-            <SearchbarHeader>
-                <SearchForm onSubmit={this.handleSubmit}>
-                    <SearchFormButton type="submit">
-                        <ImSearch size={20} color="#FF69B4" type='submit'>
-                            Search
-                        </ImSearch>
-                    </SearchFormButton>
+    return (
+        <SearchbarHeader>
+            <SearchForm onSubmit={handleSubmit}>
+                <SearchFormButton type="submit">
+                    <ImSearch size={20} color="#FF69B4" type='submit'>
+                        Search
+                    </ImSearch>
+                </SearchFormButton>
 
-                    <SearchFormInput
-                        className="input"
-                        type="text"
-                        name='searchName'
-                        onChange={this.heandelChange}
-                        value={query}
-                        placeholder="Search images and photos"
-                    />
-                </SearchForm>
-            </SearchbarHeader>
-        )
-    }
+                <SearchFormInput
+                    className="input"
+                    type="text"
+                    name='searchName'
+                    onChange={heandelChange}
+                    value={query}
+                    placeholder="Search images and photos"
+                />
+            </SearchForm>
+        </SearchbarHeader>
+    )
 }
 
 Searchbar.propTypes = {
     onSubmit: PropTypes.func.isRequired
 }
 
-export default Searchbar;
+
 
